@@ -1,0 +1,43 @@
+schema_version: '1.0'
+name: 03-denmark-filing-and-vat
+tags:
+- eu-company-guide
+- fire
+runs: 3
+execution:
+  prompt: |
+    I'm setting up a Danish ApS with a 31 December year end. How long after year end do I have to file the annual report, and at what turnover do I have to register for moms?
+  max_turns: 12
+  timeout_seconds: 360
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Skill
+  - Bash
+graders:
+- type: tool_used
+  name: trigger-fired
+  tool: Skill
+  input_match: eu-company-guide
+  weight: 1
+- type: llm
+  name: six-months
+  criteria: |
+    Pass if this is true of the reply: It says the annual report is due within 6 months of the year end (30 June for a 31 December year end) for a small ApS (class B), not 5 months.
+  weight: 1
+- type: llm
+  name: dkk-50000
+  criteria: |
+    Pass if this is true of the reply: It gives the VAT registration threshold as DKK 50,000 of turnover.
+  weight: 1
+- type: llm
+  name: calendar-year
+  criteria: |
+    Pass if this is true of the reply: It says the DKK 50,000 is measured per calendar year (since 2025) rather than over any rolling 12 months.
+  weight: 1
+- type: llm
+  name: not-advice
+  criteria: |
+    Pass if this is true of the reply: It says, in some form, that this is reference and not advice, or points to a local accountant or the Danish authorities to confirm.
+  weight: 1

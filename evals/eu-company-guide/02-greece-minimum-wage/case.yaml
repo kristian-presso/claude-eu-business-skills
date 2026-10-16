@@ -1,0 +1,43 @@
+schema_version: '1.0'
+name: 02-greece-minimum-wage
+tags:
+- eu-company-guide
+- fire
+runs: 3
+execution:
+  prompt: |
+    What's the current minimum monthly wage in Greece for an office employee, and how many salaries a year do I pay?
+  max_turns: 12
+  timeout_seconds: 360
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Skill
+  - Bash
+graders:
+- type: tool_used
+  name: trigger-fired
+  tool: Skill
+  input_match: eu-company-guide
+  weight: 1
+- type: llm
+  name: eur-920
+  criteria: |
+    Pass if this is true of the reply: It gives EUR 920 gross per month (from 1 April 2026).
+  weight: 1
+- type: llm
+  name: fourteen
+  criteria: |
+    Pass if this is true of the reply: It says employees receive 14 salaries a year (12 plus Christmas, Easter and holiday allowances).
+  weight: 1
+- type: llm
+  name: dated-sourced
+  criteria: |
+    Pass if this is true of the reply: It gives an effective or checked date for the figure and tells the reader where to verify it (for example the Ministry of Labour).
+  weight: 1
+- type: llm
+  name: not-advice
+  criteria: |
+    Pass if this is true of the reply: It says, in some form, that this is reference and not legal or tax advice, or points to a local accountant or lawyer.
+  weight: 1

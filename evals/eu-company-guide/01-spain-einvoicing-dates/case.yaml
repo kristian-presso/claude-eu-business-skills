@@ -1,0 +1,43 @@
+schema_version: '1.0'
+name: 01-spain-einvoicing-dates
+tags:
+- eu-company-guide
+- fire
+runs: 3
+execution:
+  prompt: |
+    It's 16 October 2026. I run a small Spanish SL with about EUR 2m turnover. When exactly do I have to start issuing B2B e-invoices under the new rules, and is that the same thing as VeriFactu?
+  max_turns: 12
+  timeout_seconds: 360
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Skill
+  - Bash
+graders:
+- type: tool_used
+  name: trigger-fired
+  tool: Skill
+  input_match: eu-company-guide
+  weight: 1
+- type: llm
+  name: date-2028
+  criteria: |
+    Pass if this is true of the reply: It says a business with turnover of EUR 8m or less must comply from 6 October 2028 (24 months after the Order took effect on 6 October 2026), not 1 October 2028 or earlier.
+  weight: 1
+- type: llm
+  name: order-reference
+  criteria: |
+    Pass if this is true of the reply: It mentions that the Ministerial Order (HAC/1028/2026) was published in October 2026 / took effect on 6 October 2026.
+  weight: 1
+- type: llm
+  name: separate-regimes
+  criteria: |
+    Pass if this is true of the reply: It explains VeriFactu (billing software rules) and the B2B e-invoicing mandate are separate obligations.
+  weight: 1
+- type: llm
+  name: verifactu-status
+  criteria: |
+    Pass if this is true of the reply: It says VeriFactu's legal start dates are 2027 (1 January for companies, 1 July for others) and that a deferral to 2028 has been announced but not yet enacted, or otherwise flags its status as uncertain and to be checked.
+  weight: 1
