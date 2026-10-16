@@ -1,0 +1,24 @@
+{
+  "name": "claude-eu-business-skills",
+  "owner": {
+    "name": "Kristian Papadakis",
+    "url": "https://kristianpapadakis.com"
+  },
+  "description": "EU business skills for Claude, as a standalone Claude Code marketplace. All departments in one place: https://github.com/kristian-presso/claude-skills",
+  "plugins": [
+    {
+      "name": "eu-business",
+      "source": "./",
+      "description": "Running or selling into a small business in Germany, France, Spain, Denmark or Greece with Claude: VAT, e-invoicing, company forms, corporate tax, minimum wage and data protection, plus the EU-wide rules. Reference, not advice.",
+      "category": "finance",
+      "keywords": [
+        "eu",
+        "tax",
+        "vat",
+        "e-invoicing",
+        "company-law"
+      ],
+      "homepage": "https://github.com/kristian-presso/claude-eu-business-skills"
+    }
+  ]
+}
